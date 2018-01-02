@@ -1,52 +1,18 @@
 <?php
 /**
- * The template for displaying search results pages.
+ * Search results page
  *
- * @package FoundationPress
- * @since FoundationPress 1.0.0
+ * Methods for TimberHelper can be found in the /lib sub-directory
+ *
+ * @package  WordPress
+ * @subpackage  Timber
+ * @since   Timber 0.1
  */
 
-get_header(); ?>
+$templates = array( 'search.twig', 'archive.twig', 'index.twig' );
+$context = Timber::get_context();
 
-<div class="main-wrap" role="main">
+$context['title'] = 'Search results for '. get_search_query();
+$context['posts'] = Timber::get_posts();
 
-<?php do_action( 'foundationpress_before_content' ); ?>
-
-<article <?php post_class('main-content') ?> id="search-results">
-	<header>
-	    <h1 class="entry-title"><?php _e( 'Search Results for', 'foundationpress' ); ?> "<?php echo get_search_query(); ?>"</h1>
-	</header>
-
-	<?php if ( have_posts() ) : ?>
-
-		<?php while ( have_posts() ) : the_post(); ?>
-			<?php get_template_part( 'template-parts/content', get_post_format() ); ?>
-		<?php endwhile; ?>
-
-		<?php else : ?>
-			<?php get_template_part( 'template-parts/content', 'none' ); ?>
-
-	<?php endif; ?>
-
-	<?php do_action( 'foundationpress_before_pagination' ); ?>
-
-	<?php
-	if ( function_exists( 'foundationpress_pagination' ) ) :
-		foundationpress_pagination();
-	elseif ( is_paged() ) :
-	?>
-
-		<nav id="post-nav">
-			<div class="post-previous"><?php next_posts_link( __( '&larr; Older posts', 'foundationpress' ) ); ?></div>
-			<div class="post-next"><?php previous_posts_link( __( 'Newer posts &rarr;', 'foundationpress' ) ); ?></div>
-		</nav>
-	<?php endif; ?>
-
-</article>
-
-<?php do_action( 'foundationpress_after_content' ); ?>
-<?php get_sidebar(); ?>
-
-</div>
-
-<?php get_footer();
+Timber::render( $templates, $context );

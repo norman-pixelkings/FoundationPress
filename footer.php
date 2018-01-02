@@ -1,32 +1,17 @@
 <?php
 /**
- * The template for displaying the footer
+ * Third party plugins that hijack the theme will call wp_footer() to get the footer template.
+ * We use this to end our output buffer (started in header.php) and render into the view/page-plugin.twig template.
  *
- * Contains the closing of the "off-canvas-wrap" div and all content after.
- *
- * @package FoundationPress
- * @since FoundationPress 1.0.0
+ * If you're not using a plugin that requries this behavior (ones that do include Events Calendar Pro and 
+ * WooCommerce) you can delete this file and header.php
  */
 
-?>
-
-		</section>
-		<div class="footer-container" data-sticky-footer>
-			<footer class="footer">
-				<?php do_action( 'foundationpress_before_footer' ); ?>
-				<?php dynamic_sidebar( 'footer-widgets' ); ?>
-				<?php do_action( 'foundationpress_after_footer' ); ?>
-			</footer>
-		</div>
-
-		<?php do_action( 'foundationpress_layout_end' ); ?>
-
-<?php if ( get_theme_mod( 'wpt_mobile_menu_layout' ) === 'offcanvas' ) : ?>
-	</div><!-- Close off-canvas content -->
-<?php endif; ?>
-
-
-<?php wp_footer(); ?>
-<?php do_action( 'foundationpress_before_closing_body' ); ?>
-</body>
-</html>
+$timberContext = $GLOBALS['timberContext'];
+if ( ! isset( $timberContext ) ) {
+	throw new \Exception( 'Timber context not set in footer.' );
+}
+$timberContext['content'] = ob_get_contents();
+ob_end_clean();
+$templates = array( 'page-plugin.twig' );
+Timber::render( $templates, $timberContext );

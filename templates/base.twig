@@ -1,0 +1,82 @@
+{% block html_head_container %}
+
+	{% include 'html-header.twig' %}
+	{% block head %}
+	{% endblock %}
+
+{% endblock %}
+
+	<body class="{{body_class}}" data-template="base.twig">
+		
+		<div class="off-canvas-wrapper">
+
+			{% block offcanvas %}
+				<div class="off-canvas position-right" id="offcanvasID" data-off-canvas data-transition="overlap">
+
+					<button class="close-button" aria-label="Close menu" type="button" data-close>
+						<span aria-hidden="true">&times;</span>
+					</button>
+			
+					<nav class="menu" role="navigation">
+						{% include "menu-vertical.twig" with {'menu': menu.get_items} %}
+					</nav>
+
+				</div>
+
+			{% endblock %}
+
+			<div class="off-canvas-content" data-off-canvas-content>
+			
+				{% block header %}	
+				
+					<header class="site-header">
+						<div class="top-bar">
+							<div class="top-bar-left">
+								<h1 class="hdr-logo" role="banner">
+									<a class="idTag" href="{{site.url}}" rel="home">
+									<img src="{{theme.link}}/dist/assets/images/logo.svg" alt="{{site.name}}" />
+									<span>{{site.name}}</span>
+									</a>
+								</h1>
+							</div>
+							<div class="top-bar-right">
+								<button type="button" class="button" data-toggle="offcanvasID">Open Menu Norman</button>
+								<nav class="menu" role="navigation">
+									{% include "menu.twig" with {'menu': menu.get_items} %}
+								</nav>
+							</div>
+						</div>
+					</header>
+				
+				{% endblock %}			
+
+				<section role="main" class="section">
+					{% if title %}<h1 class="page-title">{{title}}</h1>{% endif %}
+					<div class="{{sidebar_class}}">
+						{% block content %}
+							Sorry, no content
+						{% endblock %}
+					</div>
+					{% if sidebar %}
+						<aside>
+							{{sidebar}}
+						</aside>
+					{% endif %}
+				</section>
+
+				{% block footer %}
+					<footer class="site-footer">
+						<div class="section">
+							{% include 'footer.twig' %}
+						</div>	
+					</footer>
+					{{ function('wp_footer') }}
+				{% endblock %}
+
+			</div>
+
+		</div>	
+
+	</body>
+
+</html>
